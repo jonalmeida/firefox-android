@@ -609,13 +609,13 @@ data class ContextMenuCandidate(
 // Some helper methods to work with HitResult. We may want to improve the API of HitResult and remove some of the
 // helpers eventually: https://github.com/mozilla-mobile/android-components/issues/1443
 
-private fun HitResult.isImage(): Boolean =
+fun HitResult.isImage(): Boolean =
     (this is HitResult.IMAGE || this is HitResult.IMAGE_SRC) && src.isNotEmpty()
 
-private fun HitResult.isVideoAudio(): Boolean =
+fun HitResult.isVideoAudio(): Boolean =
     (this is HitResult.VIDEO || this is HitResult.AUDIO) && src.isNotEmpty()
 
-private fun HitResult.isUri(): Boolean =
+fun HitResult.isUri(): Boolean =
     ((this is HitResult.UNKNOWN && src.isNotEmpty()) || this is HitResult.IMAGE_SRC)
 
 private fun HitResult.isHttpLink(): Boolean =
@@ -645,7 +645,7 @@ private fun HitResult.canOpenInExternalApp(appLinksUseCases: AppLinksUseCases): 
     return false
 }
 
-internal fun HitResult.getLink(): String = when (this) {
+fun HitResult.getLink(): String = when (this) {
     is HitResult.UNKNOWN -> src
     is HitResult.IMAGE_SRC -> uri
     is HitResult.IMAGE ->
@@ -662,7 +662,7 @@ internal fun HitResult.getLink(): String = when (this) {
 }
 
 @VisibleForTesting
-internal fun SessionState.isUrlSchemeAllowed(url: String): Boolean {
+fun SessionState.isUrlSchemeAllowed(url: String): Boolean {
     return when (val engineSession = engineState.engineSession) {
         null -> true
         else -> {

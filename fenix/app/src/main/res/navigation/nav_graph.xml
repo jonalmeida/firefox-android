@@ -304,7 +304,20 @@
         <action
             android:id="@+id/action_browserFragment_to_cookieBannerDialogFragment"
             app:destination="@id/cookieBannerDialogFragment" />
+        <action
+            android:id="@+id/action_browserFragment_to_browserPreviewFragment"
+            app:destination="@id/browserPreviewFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/browserPreviewFragment"
+        android:name="org.mozilla.fenix.browser.preview.BrowserPreviewFragment"
+        tools:layout="@layout/fragment_browser_preview" >
+        <argument
+            android:name="activeSessionId"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
 
     <fragment
         android:id="@+id/externalAppBrowserFragment"

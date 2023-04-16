@@ -33,8 +33,8 @@ class CustomTabSessionTitleObserver(
         // If we showed a title once in a custom tab then we are going to continue displaying
         // a title (to avoid the layout bouncing around). However if no title is available then
         // we just use the URL.
-        if (showedTitle && tab.content.title.isEmpty()) {
-            toolbar.title = tab.content.url
+        if (tab.content.title.isEmpty()) {
+            toolbar.url = tab.content.url
         }
     }
 

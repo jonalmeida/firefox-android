@@ -5,6 +5,7 @@
 package org.mozilla.fenix.browser
 
 import android.content.Context
+import android.content.Intent
 import android.os.StrictMode
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,8 @@ import mozilla.components.browser.toolbar.BrowserToolbar
 import mozilla.components.concept.engine.permission.SitePermissions
 import mozilla.components.feature.app.links.AppLinksUseCases
 import mozilla.components.feature.contextmenu.ContextMenuCandidate
+import mozilla.components.feature.contextmenu.getLink
+import mozilla.components.feature.customtabs.createCustomTabConfigFromIntent
 import mozilla.components.feature.readerview.ReaderViewFeature
 import mozilla.components.feature.tab.collections.TabCollection
 import mozilla.components.feature.tabs.WindowFeature
@@ -38,6 +41,7 @@ import mozilla.components.support.base.feature.ViewBoundFeatureWrapper
 import mozilla.components.support.ktx.kotlinx.coroutines.flow.ifAnyChanged
 import org.mozilla.fenix.GleanMetrics.ReaderMode
 import org.mozilla.fenix.R
+import org.mozilla.fenix.browser.preview.createPreviewCandidate
 import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.components.TabCollectionStorage
 import org.mozilla.fenix.components.toolbar.BrowserToolbarView
@@ -48,6 +52,7 @@ import org.mozilla.fenix.ext.requireComponents
 import org.mozilla.fenix.ext.runIfFragmentIsAttached
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.nimbus.FxNimbus
+import org.mozilla.fenix.settings.SupportUtils
 import org.mozilla.fenix.settings.quicksettings.protections.cookiebanners.dialog.CookieBannerReEngagementDialogUtils
 import org.mozilla.fenix.settings.quicksettings.protections.cookiebanners.getCookieBannerUIMode
 import org.mozilla.fenix.shortcut.PwaOnboardingObserver
@@ -474,7 +479,22 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
         ) + ContextMenuCandidate.createOpenInExternalAppCandidate(
             requireContext(),
             contextMenuCandidateAppLinksUseCases,
-        )
+        ) + createPreviewCandidate { _, hitResult ->
+            val url = hitResult.getLink()
+            val intent = SupportUtils.createCustomTabIntent(requireContext(), url)
+            val config = createCustomTabConfigFromIntent(intent, resources)
+            val customTabId = requireComponents.useCases.customTabsUseCases.add(
+                url,
+                config,
+                false,
+                null,
+                source = SessionState.Source.External.CustomTab(null),
+            )
+            findNavController().nav(
+                R.id.browserFragment,
+                BrowserFragmentDirections.actionBrowserFragmentToBrowserPreviewFragment(customTabId),
+            )
+        }
     }
 
     /**
