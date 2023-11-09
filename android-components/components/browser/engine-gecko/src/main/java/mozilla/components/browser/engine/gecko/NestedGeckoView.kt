@@ -83,7 +83,7 @@ open class NestedGeckoView(context: Context) : GeckoView(context), NestedScrolli
             MotionEvent.ACTION_DOWN -> {
                 // A new gesture started. Ask GV if it can handle this.
                 inputResultDetail = InputResultDetail.newInstance(false)
-                this.getParent().requestDisallowInterceptTouchEvent(true);
+                this.parent?.requestDisallowInterceptTouchEvent(true);
                 updateInputResult(event)
 
                 nestedOffsetY = 0
@@ -126,7 +126,7 @@ open class NestedGeckoView(context: Context) : GeckoView(context), NestedScrolli
                     it?.scrollableDirections(),
                     it?.overscrollDirections(),
                 )
-                this.getParent().requestDisallowInterceptTouchEvent(false);
+                this.parent?.requestDisallowInterceptTouchEvent(false);
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
             }
     }
