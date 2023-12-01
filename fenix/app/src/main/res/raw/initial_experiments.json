@@ -147,7 +147,7 @@
       "channel": "beta",
       "userFacingName": "Beta Android Onboarding Redesign - Treatment A Rollout",
       "userFacingDescription": "Testing a new onboarding experience.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": true,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
