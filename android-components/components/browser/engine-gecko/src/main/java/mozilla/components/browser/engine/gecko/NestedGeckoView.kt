@@ -12,7 +12,9 @@ import androidx.core.view.NestedScrollingChild
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
 import mozilla.components.concept.engine.InputResultDetail
+import org.mozilla.geckoview.GeckoResult
 import org.mozilla.geckoview.GeckoView
+import org.mozilla.geckoview.PanZoomController
 
 /**
  * geckoView that supports nested scrolls (for using in a CoordinatorLayout).
@@ -153,7 +155,7 @@ open class NestedGeckoView(context: Context) : GeckoView(context), NestedScrolli
     @SuppressLint("WrongThread") // Lint complains startNestedScroll() needs to be called on the main thread
     @VisibleForTesting
     internal fun updateInputResult(event: MotionEvent) {
-        super.onTouchEventForDetailResult(event)
+        superOnTouchEventForDetailResult(event)
             .accept {
                 inputResultDetail = inputResultDetail.copy(
                     it?.handledResult(),
@@ -195,6 +197,10 @@ open class NestedGeckoView(context: Context) : GeckoView(context), NestedScrolli
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
             }
     }
+
+    @VisibleForTesting
+    internal open fun superOnTouchEventForDetailResult(event: MotionEvent): GeckoResult<PanZoomController.InputResultDetail> =
+        super.onTouchEventForDetailResult(event)
 
     override fun setNestedScrollingEnabled(enabled: Boolean) {
         childHelper.isNestedScrollingEnabled = enabled
